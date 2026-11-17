@@ -167,8 +167,8 @@ Daily Blitz variant, scores, personal bests, leaderboards.
 ## FE27 Points, round pacing and experiments
 
 **Milestone:** M5 · **Packages:** engine (`session/`, `metrics/`), ui, content, tools ·
-**Decisions:** D69, D71, D72, D73, D74, D76, D104, D110, D133, D143, D150, D152, D158, D173, D179, D184 ·
-**Depends on:** FE03, FE04, FE11, FE15, FE18
+**Decisions:** D59, D62, D69, D71, D72, D73, D74, D76, D104, D110, D133, D143, D150, D152, D158, D173, D179, D184 ·
+**Depends on:** FE03, FE04, FE11, FE13, FE15, FE18
 
 ### Purpose
 Run the MVP experiments safely: points, how rounds continue, the chapter

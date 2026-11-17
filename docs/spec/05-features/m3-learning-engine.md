@@ -570,7 +570,7 @@ experiments before real users see them.
     logs with the FE17 binding (run in Node). Replaced by tester-log fits once
     enough logs are donated (D22: shipped as data).
 11. **Calibration from tester logs:** donated logs are used to fit profile
-    settings (practice patterns, error rates) so the simulated population
+    shares and settings (practice patterns, error rates) so the simulated population
     resembles real testers. Only fitted aggregate values go in the repo, never logs.
 12. **Determinism:** one seed gives an identical report and event logs on any
     CI machine. Each learner's seed comes from the run seed and learner index,
