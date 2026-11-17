@@ -1,6 +1,6 @@
 # Placeholders
 
-**Status:** v1.2. Every value marked (placeholder) in the spec. Engine values
+**Status:** v1.1. Every value marked (placeholder) in the spec. Engine values
 live in `engine/tuning.ts`. Others live in the named config.
 
 ## Rules
