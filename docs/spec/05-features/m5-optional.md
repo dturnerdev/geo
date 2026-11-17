@@ -167,8 +167,8 @@ Daily Blitz variant, scores, personal bests, leaderboards.
 ## FE27 Points, round pacing and experiments
 
 **Milestone:** M5 · **Packages:** engine (`session/`, `metrics/`), ui, content, tools ·
-**Decisions:** D69, D71, D72, D73, D74, D76, D104, D110, D133, D143, D150, D152, D158, D173, D179, D184 ·
-**Depends on:** FE03, FE04, FE11, FE15, FE18
+**Decisions:** D59, D62, D69, D71, D72, D73, D74, D76, D104, D110, D133, D143, D150, D152, D158, D173, D179, D184 ·
+**Depends on:** FE03, FE04, FE11, FE13, FE15, FE18
 
 ### Purpose
 Run the MVP experiments safely: points, how rounds continue, the chapter
@@ -194,6 +194,7 @@ end and round pacing, each with a calm default for public builds.
    - Pre-registered in `experiments/Exx.md` (FE03 item 8).
    - Internal and closed builds only (D110). Public builds always get variant A.
    - At most 3 live at once (placeholder). At least 2 weeks each. Decided per 08 §6 (D184).
+   - Exception: E09 is decided by the FE13 item 11 switch checks (08 §9), not by "clearly beaten".
 3. **Continue between rounds (E01, D73):**
    - A: the pause waits for a tap.
    - B: a ring fills for 3 s, then the next round starts. Any tap stops it.

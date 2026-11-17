@@ -208,12 +208,12 @@ explainable rules, the same on every platform.
    |-----------|-------|------|------|------|
    | Tap / pick (P1, P3) | Wrong | Hint used | Correct | Correct and fast (R3/R4 only) |
    | Place a point (P2) | Outside 2× tolerance | Within 2× tolerance | Within tolerance | Within half tolerance and fast |
-   | Type (P4) | Wrong, or matches another real place | Near-miss, or hint used | Exact match | Exact and fast |
+   | Type (P4) | Wrong, or matches another real place, or is as close or closer to another valid name | Near-miss, or hint used | Exact match | Exact and fast |
    | Set (P1 Surround) | Under 70% found | 70–99% found | All found | All found, fast, no wrong taps |
    | Drag (P5) | More than 1 wrong | 1 wrong | All correct | All correct and fast |
    | Order (P6) | More than 1 out of place | 1 swap | Perfect | Perfect and fast |
    | Chain (P7) | Gave up | Over par | Par | Under par or perfect |
-   | Aim (P8) | Miss beyond the near-miss angle | Near miss | Beam hit | Narrow-beam hit, first shot |
+   | Aim (P8) | Miss beyond the near-miss angle | Near miss | Beam hit | Hit at R3 or R4, first shot |
    | Draw (P9) | Wrong direction or route | Right direction, route off tolerance | Within tolerance | Within half tolerance and fast |
 
 4. **Outcome mapping:** Good and Easy → `correct`. Hard → `close`, except
@@ -235,7 +235,7 @@ explainable rules, the same on every platform.
      accepted, capped at Hard, and the correct spelling is shown quietly.
    - **Typing tolerance (placeholders):**
      - Normalise both strings first: ignore case, accents, punctuation, spaces
-       and a leading "The".
+       and a leading "The" as a whole word, before spaces are removed.
      - Count typos as edit distance, where swapping two adjacent letters counts as 1.
      - Typos allowed, by the length of the target name: 1–4 letters 0,
        5–8 letters 1, 9 or more 2. Spelling support adds 1 at each length.

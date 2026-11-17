@@ -322,7 +322,7 @@ technical log, and let testers share a counts-only summary.
    shows "Not enough data yet", never 0.
    - Rates: 30 answers.
    - Calibration: 200 answers, with at least 20 answers per bin. Smaller bins
-     merge with a neighbour.
+     merge with a neighbour. Same-day answers don't count (AC-04.2).
    - Surprise-check accuracy: 20 checks.
 5. **Per-variant metrics:** for each experiment, metrics are computed from the
    first `ExperimentExposed` onwards, grouped by variant.

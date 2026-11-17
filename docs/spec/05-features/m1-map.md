@@ -405,6 +405,7 @@ budgets, with an extension point for street-level detail later.
    - **Hysteresis (placeholder):** a detail level appears at its zoom threshold T
      and is removed only below T − 0.25 zoom levels (about 19% further out), so
      detail doesn't flicker at a boundary.
+   - One zoom level is a doubling of camera distance.
    - The new level fades in over the old one. With reduce motion on, it switches straight away.
 3. **Zoom limits:**
    - Minimum: the whole globe in view, or the whole flat map.
