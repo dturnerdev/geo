@@ -194,6 +194,7 @@ end and round pacing, each with a calm default for public builds.
    - Pre-registered in `experiments/Exx.md` (FE03 item 8).
    - Internal and closed builds only (D110). Public builds always get variant A.
    - At most 3 live at once (placeholder). At least 2 weeks each. Decided per 08 §6 (D184).
+   - Exception: E09 is decided by the FE13 item 11 switch checks (08 §9), not by "clearly beaten".
 3. **Continue between rounds (E01, D73):**
    - A: the pause waits for a tap.
    - B: a ring fills for 3 s, then the next round starts. Any tap stops it.
