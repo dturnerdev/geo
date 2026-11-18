@@ -41,12 +41,13 @@ function answer(at: number, overrides: Partial<AnswerRecordedPayload> = {}): Dom
       rating: 3,
       level: 1,
       format: 'tap',
-      response: { responseTimeMs: 1_000 },
+      response: { lng: 2.35, lat: 48.85 },
       geometry: {},
       aids: [],
       hintsUsed: 0,
       surprise: false,
       roundSeed: 'seed-1',
+      responseTimeMs: 1_000,
       ...overrides,
     },
     at,
@@ -102,6 +103,22 @@ describe('FE04 metrics', () => {
 
   it.skip('AC-04.1 golden fixture logs produce exact expected metric values on Android', () => {
     // Needs the Galaxy A07 4G reference replay harness (device worker).
+  });
+
+  it('FE04 active practice reads responseTimeMs directly and caps only at computation', () => {
+    const build = (responseTimeMs: number): DomainEvent[] =>
+      Array.from({ length: 30 }, (_, index) =>
+        answer(index * DAY_MS + 12 * 60 * 60 * 1000, { itemId: 'alpha', responseTimeMs }),
+      );
+
+    const atCap = computeMetrics(build(60_000), {}, NOW);
+    const overCap = computeMetrics(build(120_000), {}, NOW);
+    const belowCap = computeMetrics(build(30_000), {}, NOW);
+
+    // A stored value above the cap contributes exactly the cap, so the metric
+    // applies the 60 s limit without rewriting the stored measurement.
+    expect(overCap.efficiencyPerHour).toBeCloseTo(atCap.efficiencyPerHour as number, 12);
+    expect(belowCap.efficiencyPerHour).toBeCloseTo((atCap.efficiencyPerHour as number) * 2, 12);
   });
 
   it('AC-04.2 same-day answers are excluded from calibration', () => {

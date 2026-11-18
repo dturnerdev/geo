@@ -1,21 +1,25 @@
 import { describe, expect, it } from 'vitest';
 import { runEventStoreSuite } from './event-store-suite.ts';
 import { InMemoryStore } from './in-memory-store.ts';
-import { SqliteNativeStore, SqliteWasmStore } from './sqlite-stores.ts';
+import {
+  createSqliteWasmMemoryDriver,
+  SqliteNativeStore,
+  SqliteWasmStore,
+} from './sqlite-stores.ts';
 import { answerEvent } from './test-helpers.ts';
 
 runEventStoreSuite('InMemoryStore', () => new InMemoryStore());
 
-// The SQLite adapters are platform stubs until their dependencies are approved.
-// They are exercised with a logical backend so their EventStore surface and
-// transaction sequencing are covered here.
+// Real SQLite through @sqlite.org/sqlite-wasm in Node. The same SQL
+// EventStore implementation backs the web (OPFS SAH-pool) and Android
+// (@capacitor-community/sqlite) drivers.
 runEventStoreSuite(
-  'SqliteNativeStore (stub backend)',
-  () => new SqliteNativeStore(new InMemoryStore()),
+  'SqliteWasmStore',
+  async () => new SqliteWasmStore(await createSqliteWasmMemoryDriver()),
 );
 runEventStoreSuite(
-  'SqliteWasmStore (stub backend)',
-  () => new SqliteWasmStore(new InMemoryStore()),
+  'SqliteNativeStore',
+  async () => new SqliteNativeStore(await createSqliteWasmMemoryDriver()),
 );
 
 describe('InMemoryStore failure paths', () => {
@@ -41,6 +45,30 @@ describe('InMemoryStore failure paths', () => {
       typeof answerEvent
     >;
     expect((await store.append([event])).ok).toBe(false);
+    expect(await store.count()).toBe(0);
+  });
+});
+
+describe('SqliteWasmStore real driver', () => {
+  it('AC-01.1 rolls back an append batch that hits a duplicate', async () => {
+    const store = new SqliteWasmStore(await createSqliteWasmMemoryDriver());
+    const event = answerEvent(1_000);
+    expect((await store.append([event])).ok).toBe(true);
+
+    const duplicate = await store.append([answerEvent(2_000), event]);
+    expect(duplicate).toEqual({ ok: false, error: { kind: 'corrupt' } });
+    expect(await store.count()).toBe(1);
+  });
+
+  it('AC-01.1 rejects a corrupt event without writing any row', async () => {
+    const store = new SqliteWasmStore(await createSqliteWasmMemoryDriver());
+    const event = {
+      ...answerEvent(2_000),
+      payload: { rating: 'bad' },
+    } as unknown as ReturnType<typeof answerEvent>;
+
+    const result = await store.append([event]);
+    expect(result).toEqual({ ok: false, error: { kind: 'corrupt' } });
     expect(await store.count()).toBe(0);
   });
 });

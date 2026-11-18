@@ -41,6 +41,7 @@ export function answerEvent(at: number, itemId = 'country-fr'): DomainEvent {
       hintsUsed: 0,
       surprise: false,
       roundSeed: 'seed-1',
+      responseTimeMs: 1_200,
     },
     at,
   );

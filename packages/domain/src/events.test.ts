@@ -45,6 +45,7 @@ export function fixtureEvents(): readonly DomainEvent[] {
       hintsUsed: 0,
       surprise: false,
       roundSeed: 'seed-1',
+      responseTimeMs: 1_200,
     }),
     fixtureEvent('RoundStarted', { roundId: 'round-1', seed: 'seed-1' }),
     fixtureEvent('RoundEnded', { roundId: 'round-1', reason: 'complete' }),
@@ -102,6 +103,40 @@ describe('event fixtures', () => {
         expect(upgraded.value).toEqual(fixture);
         expect(upgraded.value.schema).toBe(CURRENT_EVENT_SCHEMA[fixture.type]);
       }
+    }
+  });
+
+  it('AC-01.14 every AnswerRecorded has a whole-number responseTimeMs at least zero', () => {
+    const payload: EventPayloadOf<'AnswerRecorded'> = {
+      itemId: 'country-fr',
+      roundId: 'round-1',
+      rating: 3,
+      level: 1,
+      format: 'tap',
+      response: { lng: 2.35, lat: 48.85 },
+      geometry: { distanceMetres: 1200 },
+      aids: [],
+      hintsUsed: 0,
+      surprise: false,
+      roundSeed: 'seed-1',
+      responseTimeMs: 1_200,
+    };
+    const valid = fixtureEvent('AnswerRecorded', payload);
+    expect(domainEventSchema.safeParse(valid).success).toBe(true);
+
+    const missing: Record<string, unknown> = { ...payload };
+    delete missing['responseTimeMs'];
+    const invalidPayloads: readonly unknown[] = [
+      missing,
+      { ...payload, responseTimeMs: 1.5 },
+      { ...payload, responseTimeMs: -1 },
+      { ...payload, responseTimeMs: Number.NaN },
+      { ...payload, responseTimeMs: '1200' },
+    ];
+
+    for (const invalidPayload of invalidPayloads) {
+      const result = domainEventSchema.safeParse({ ...valid, payload: invalidPayload });
+      expect(result.success).toBe(false);
     }
   });
 

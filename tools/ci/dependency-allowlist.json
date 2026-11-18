@@ -3,6 +3,9 @@
   "dependencies": [
     "@eslint/js",
     "@formatjs/icu-messageformat-parser",
+    "@capacitor-community/sqlite",
+    "@playwright/test",
+    "@sqlite.org/sqlite-wasm",
     "@types/node",
     "eslint",
     "eslint-config-prettier",
