@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+pnpm-lock.yaml
+
+# The specification is source material and is never reformatted by tooling.
+docs/
+
+# Agent rules are maintained by hand.
+AGENTS.md

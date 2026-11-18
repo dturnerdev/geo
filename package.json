@@ -1,0 +1,38 @@
+{
+  "name": "geography",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.0.9",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "pnpm --filter @geo/web build",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p apps/web/tsconfig.json",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "gate:1": "pnpm typecheck",
+    "gate:2": "pnpm lint && pnpm format:check && node tools/ci/src/check-boundaries.ts && node tools/ci/src/check-strings.ts && node tools/ci/src/check-locales.ts",
+    "gate:7": "pnpm test && node tools/ci/src/check-spec-references.ts",
+    "gate:8": "pnpm build && node tools/ci/src/check-sizes.ts",
+    "gate:9": "node tools/ci/src/check-supply-chain.ts",
+    "gate:11": "node tools/ci/src/check-manifest.ts",
+    "gates": "pnpm gate:1 && pnpm gate:2 && pnpm gate:7 && pnpm gate:8 && pnpm gate:9 && pnpm gate:11"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@formatjs/icu-messageformat-parser": "3.5.23",
+    "@types/node": "22.20.5",
+    "eslint": "9.39.5",
+    "eslint-config-prettier": "10.1.8",
+    "fast-check": "4.10.3",
+    "globals": "17.14.0",
+    "prettier": "3.10.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.73.0",
+    "vitest": "3.2.7"
+  }
+}
