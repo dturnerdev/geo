@@ -13,7 +13,7 @@ do not share a package.
 | Wave | Task | Depends on | Packages/files owned | ACs | Status |
 |---|---|---|---|---|---|
 | 1 | M1-S3 — ADR: label collision and priority approach | none | `docs/adr/` | setup output | Done — ADR-0001; one interface spec question recorded |
-| 2 | M1-S4 — ADR: per-feature state texture styling | M1-S3 | `docs/adr/` | setup output | Ready |
+| 2 | M1-S4 — ADR: per-feature state texture styling | M1-S3 | `docs/adr/` | setup output | Done — ADR-0002; five data-contract questions recorded |
 | 3 | M1-S1 — Pipeline geometry outputs | FE02/M0 content schema, M1-S5 | `tools/content-pipeline/`, `packages/content/` | setup output; FE06 AC-06.1, AC-06.2, AC-06.10; FE09 AC-09.1–AC-09.2 | Blocked — M0 implementation and source/data schema absent |
 | 3 | M1-S5 — Perspective files (`uk`, `us`, `default`) | FE02/M0 content schema | `content/perspectives/` | setup output; FE07 AC-07.7–AC-07.8 | Blocked — M0 pack schema and reviewed Natural Earth inputs absent |
 | 3 | M1-S2 — Reference screenshot set | FE06 implementation, M0 web scaffold | `apps/web/e2e/screenshots/` | FE06 AC-06.2; FE07 AC-07.4; FE08 AC-08.4 | Blocked — no web app or renderer exists |
