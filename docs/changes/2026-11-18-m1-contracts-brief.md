@@ -342,4 +342,3 @@ Spec/code mentions:
 Spec/code mentions:
 
 - `docs/spec/05-features/m1-map.md:225:  borders(): readonly BorderLine[];`
-
