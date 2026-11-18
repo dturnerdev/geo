@@ -1,6 +1,6 @@
 # ADR-0001: Label collision and priority for globe labels
 
-- **Status:** draft
+- **Status:** Proposed
 - **Date:** 2026-11-18
 - **Feature:** FE06 (related FE08)
 - **Decisions:** D121, D125, D130, D153
@@ -50,11 +50,12 @@ For each candidate label, the layout needs:
 - a fame/priority value;
 - the current device text scale, already clamped to 1–1.6.
 
-The spec currently defines `setVisibleLabels(items: ReadonlySet<ItemId>)` and
-does not say where display text and fame are carried. The globe must not read
-raw content to fill that gap (07 §4). This ADR therefore requires app-shell to
-supply the label data with the visible set; the layout itself is independent of
-how that data arrives. See the open question below.
+`setVisibleLabels(items: ReadonlySet<ItemId>)` remains the eligibility boundary.
+The FE06 `GlobeOptions.labelFor` callback supplies a `LabelData` record for an
+eligible item: resolved text, fame (or `null`) and its pipeline anchor. The
+callback is supplied by app-shell, so globe does not import content or read raw
+pack data (07 §4). The layout resolves the callback only for the supplied set;
+it never adds candidates of its own.
 
 ### 3. Priority order
 
@@ -139,8 +140,8 @@ functions and can be tested without WebGL.
   multi-column layout.
 - Labels can pop when panning or when a higher-priority label enters or leaves.
   The spec does not define label hysteresis, so none is added.
-- The current FE06 interface does not carry the display text or fame needed by
-  the layout (see below).
+- App-shell must keep the resolver's locale, perspective and anchor data in
+  step with the active `ReadonlySet<ItemId>`.
 
 ## Alternatives considered
 
@@ -161,16 +162,16 @@ functions and can be tested without WebGL.
 - **App-shell priority-only prefilter without collision:** rejected. It does not
   resolve overlaps.
 
-## Open question
+## Contract status
 
-**Label input contract.** FE06's interface exposes only
-`setVisibleLabels(items: ReadonlySet<ItemId>)`, while the layout needs display
-text and fame for each item. `globe` may not import `content` or read raw
-content (07 §4), and perspective display names come from `ContentView` (FE07).
-This ADR does not change the spec. Before FE06 implementation, the spec must
-state how app-shell supplies `{ itemId, text, fame }`, for example through an
-extended label snapshot or a `GlobeOptions` resolver. Until that is resolved,
-this ADR remains Proposed.
+The label input contract is now the FE06 `GlobeOptions.labelFor` resolver and
+`LabelData` record. It changes no learner-visible eligibility rule: app-shell
+still supplies the set selected by D121, and fame values remain authored pack
+data. The fame formula and weights remain the M2 content task in 04 §11.
+
+This ADR remains Proposed pending the normal human ADR review. No perspective
+status, name, disputed-area treatment or perspective-selection choice is made
+here.
 
 ## References
 

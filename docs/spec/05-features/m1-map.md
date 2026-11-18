@@ -82,6 +82,42 @@ low-cost phones.
 ```ts
 export type ViewMode = 'globe' | 'flat';
 
+// WGS 84 decimal degrees. Constructors and every external boundary validate
+// finite values, lng in [-180, 180], lat in [-90, 90], and at most six decimal
+// places (07 §8, D112–D114). The brand is not present in GeoJSON I/O.
+export type LngLat = Readonly<{ lng: number; lat: number }> & {
+  readonly __brand: 'LngLat';
+};
+
+// Camera values are renderer state, not learner-facing defaults. distanceM is
+// positive; the angular fields are finite degrees. The renderer normalises
+// angular wrap at its boundary and never passes an invalid LngLat inward.
+export interface CameraTarget {
+  readonly centre: LngLat;
+  readonly distanceM: number;
+  readonly azimuthDeg: number;
+  readonly elevationDeg: number;
+}
+
+export interface CameraState extends CameraTarget {
+  readonly mode: ViewMode;
+}
+
+export type Unsubscribe = () => void;
+
+export interface LabelData {
+  readonly item: ItemId;
+  readonly text: string;
+  readonly fame: number | null;
+  readonly anchor: LngLat;
+}
+
+// app-shell resolves perspective and locale data; globe only receives this
+// boundary callback and therefore does not import content (07 §4).
+export interface GlobeOptions {
+  readonly labelFor: (item: ItemId) => LabelData | undefined;
+}
+
 export interface GlobeController {
   mount(canvas: HTMLCanvasElement, options: GlobeOptions): Result<void, GlobeError>;
   setViewMode(mode: ViewMode): Promise<void>;
@@ -211,6 +247,45 @@ contradicts the perspective.
 export type PerspectiveId = 'uk' | 'us' | 'default';
 export type BorderStyle = 'agreed' | 'disputed' | 'claim';
 
+// These are opaque authored identifiers. Their permitted learner-visible
+// values remain a content decision; the contract does not add a status list or
+// a new perspective.
+export type ItemKind = string & { readonly __brand: 'ItemKind' };
+export type PerspectiveItemStatus = string & { readonly __brand: 'PerspectiveItemStatus' };
+
+export interface ContentItem {
+  readonly id: ItemId;
+  readonly kind: ItemKind;
+  readonly status: PerspectiveItemStatus;
+  readonly names: Readonly<Partial<Record<Locale, string>>>;
+  readonly fame: number | null;
+}
+
+export interface BorderLine {
+  readonly id: string;
+  readonly style: BorderStyle;
+  readonly points: readonly LngLat[];
+}
+
+export interface PerspectiveFactOverride {
+  readonly item: ItemId;
+  readonly facet: string;
+  readonly value: string | number | boolean | readonly (string | number | boolean)[];
+}
+
+export interface PerspectiveProvenance {
+  readonly source: string;
+  readonly reviewer: string;
+}
+
+export interface PerspectivePack extends PerspectiveProvenance {
+  readonly id: PerspectiveId;
+  readonly extends: PerspectiveId | null;
+  readonly items: readonly ContentItem[];
+  readonly borders: readonly BorderLine[];
+  readonly factOverrides: readonly PerspectiveFactOverride[];
+}
+
 export function choosePerspective(
   deviceRegion: RegionCode | null, override: PerspectiveId | null,
 ): PerspectiveId;
@@ -336,6 +411,54 @@ fade gently as memory weakens. There is never fog, loss or pressure.
 export type AtlasItemState = 'undiscovered' | 'discovered' | 'established' | 'fading' | 'restored';
 export type AtlasLayer = 'country' | 'capital' | 'rivers' | 'relief' | 'regions' | 'biomes';
 
+export type AtlasLayerStates = Readonly<Record<AtlasLayer, AtlasItemState>>;
+
+export interface AtlasItemStateEntry {
+  readonly item: ItemId;
+  readonly layers: AtlasLayerStates;
+}
+
+export interface AtlasFeatureStateEntry {
+  readonly slot: FeatureSlot;
+  readonly layers: AtlasLayerStates;
+}
+
+// The item projection serves atlas summaries; featureSlots is the renderer
+// projection. Both are derived from the same ContentView and use the stable
+// slot namespace defined by FE06/FE09 and 04 §6.
+export interface AtlasSnapshot {
+  readonly perspective: PerspectiveId;
+  readonly items: readonly AtlasItemStateEntry[];
+  readonly featureSlots: readonly AtlasFeatureStateEntry[];
+}
+
+export interface AtlasLayerChange {
+  readonly layer: AtlasLayer;
+  readonly from: AtlasItemState;
+  readonly to: AtlasItemState;
+}
+
+export interface AtlasChange {
+  readonly item: ItemId;
+  readonly layers: readonly AtlasLayerChange[];
+  readonly featureSlots: readonly FeatureSlot[];
+}
+
+export interface AtlasContinentSummary {
+  readonly continent: string;
+  readonly discovered: number;
+  readonly established: number;
+  readonly fading: number;
+}
+
+export interface AtlasSummary {
+  readonly byContinent: readonly AtlasContinentSummary[];
+  readonly discovered: number;
+  readonly established: number;
+  readonly fading: number;
+  readonly fadingItems: readonly ItemId[];
+}
+
 export interface RecallPredictor {
   recall(itemFacet: ItemFacetKey, at: number): number | null;  // null = never reviewed
 }
@@ -432,6 +555,53 @@ budgets, with an extension point for street-level detail later.
 
 ```ts
 export type DetailLevel = 'L0' | 'L1' | 'L2';
+
+export type FeatureSlot = number & { readonly __brand: 'FeatureSlot' };
+
+export interface FeatureSlotEntry {
+  readonly slot: FeatureSlot;
+  readonly featureId: string;
+  readonly item: ItemId | null;
+}
+
+export interface FeatureSlotTable {
+  readonly entries: readonly FeatureSlotEntry[];
+}
+
+export interface TapZone {
+  readonly item: ItemId;
+  readonly rings: readonly (readonly LngLat[])[];
+}
+
+export interface LabelAnchor {
+  readonly item: ItemId;
+  readonly at: LngLat;
+}
+
+export interface DetailMesh {
+  readonly spherePositions: readonly number[];
+  readonly flatPositions: readonly number[];
+  readonly indices: readonly number[];
+  readonly featureSlots: readonly FeatureSlot[];
+}
+
+export interface GeometryChunk {
+  readonly level: DetailLevel;
+  readonly region: RegionChunkId | null;
+  readonly features: readonly FeatureSlotEntry[];
+  readonly mesh: DetailMesh;
+  readonly outlines: readonly BorderLine[];
+  readonly tapZones: readonly TapZone[];
+  readonly labelAnchors: readonly LabelAnchor[];
+}
+
+export type RegionChunkId = string & { readonly __brand: 'RegionChunkId' };
+
+export interface RegionChunk {
+  readonly id: RegionChunkId;
+  readonly level: 'L2';
+  readonly geometry: GeometryChunk;
+}
 
 export interface DetailSource {
   readonly maxLevel: DetailLevel;

@@ -1,6 +1,6 @@
 # ADR-0002: Per-feature styling through a state texture indexed by feature ID
 
-- **Status:** draft
+- **Status:** Proposed
 - **Date:** 2026-11-18
 - **Feature:** FE08 (related FE06, FE07)
 - **Decisions:** D24, D32, D121, D125, D157, D160, D162
@@ -149,9 +149,10 @@ layer L4. The L4 state only enables the full relief path for that layer.
 
 ### 7. Detail levels, chunks and mode changes
 
-- L0–L2 meshes and L2 region chunks share the same slot space and the same
-  state texture. Loading a chunk uploads geometry only; its atlas states are
-  already present.
+- L0–L2 meshes and L2 region chunks share the same `FeatureSlot` namespace
+  defined by FE09's `GeometryChunk`/`RegionChunk` contract and 04 §6.1, and
+  the same state texture. Loading a chunk uploads geometry only; its atlas
+  states are already present.
 - The cut mesh used for the flat map reuses the same slot attribute, so the
   globe/flat morph changes positions, not styling. State survives the morph.
 - On `webglcontextlost`, the texture and its CPU mirror are retained logically
@@ -224,40 +225,15 @@ layer L4. The L4 state only enables the full relief path for that layer.
   It is wasteful, breaks render-on-demand, and is unnecessary because the
   snapshot changes only at a pause.
 
-## Open questions
+## Open question
 
-The spec does not define the data that makes this ADR implementable. These are
-blockers for FE08, not decisions this ADR may invent.
-
-1. **Feature slot allocation and pack schema.** Neither 04 §6 nor the M1
-   pipeline setup defines a feature ID field, a dense slot, or a slot shared
-   across L0–L2 and region chunks. The pipeline task is blocked because the M0
-   pack schema and source data are absent. The spec must say which component
-   assigns slots, how they remain stable when content changes, and how a slot
-   maps to an `ItemId`. Until then the texture layout cannot be built or
-   tested.
-2. **`AtlasSnapshot` shape and the `setAtlas` contract.** FE08 uses
-   `AtlasSnapshot` but never defines it. It does not say whether it carries
-   per-item state, per-layer state, feature slots, or the slot-to-item mapping.
-   `globe` may not read `content` (07 §4), so the snapshot or a companion
-   app-shell callback must carry everything the texture needs. The existing
-   interface is `setAtlas(snapshot: AtlasSnapshot): void`; this ADR does not
-   change it.
-3. **Multiple geometry features per item.** An item can have several features
-   (islands, exclaves, 180° splits rejoined by the pipeline). FE08 states are
-   per item, while the texture is indexed per feature. The pipeline mapping
-   must define that one item's state is written to all of its slots, and which
-   slot represents the item for tap zones and labels. This is absent from the
-   spec.
-4. **Perspective removal.** FE08 says an item that leaves the perspective
-   disappears from the atlas without a "lost" effect. It does not say whether
-   its geometry is omitted from the perspective, drawn as undiscovered, or
-   hidden by another mechanism. This ADR does not choose one; the globe will
-   follow whatever the snapshot and pack provide.
-5. **State values are not versioned in the spec.** The ADR reserves 5–15 and
-   treats unknown values as undiscovered, but the spec has no statement that
-   state codes are append-only. That invariant should be recorded in the pack
-   data-format rules so future states cannot be renumbered silently.
+The internal geometry and snapshot contracts are now defined by FE09/FE08 and
+04 §6.1/§8.1. One learner-visible perspective question remains deliberately
+open: FE08 says an item that leaves the perspective disappears from the atlas
+without a "lost" effect, but does not say whether its geometry is omitted,
+drawn as undiscovered, or hidden by another mechanism. This ADR does not
+choose one; the globe follows whatever the approved perspective pack and
+snapshot provide.
 
 ## References
 
@@ -265,6 +241,8 @@ blockers for FE08, not decisions this ADR may invent.
 - FE06 Behaviour 1, 6, 9, 12; AC-06.4, AC-06.6
 - FE07 Behaviour 7–8
 - 04 §6; 06 §5.3, §5.4, §7; 07 §4, §6, §7
+- FE06/FE08/FE09 Interfaces: `FeatureSlot`, `GeometryChunk`, `RegionChunk`,
+  `AtlasSnapshot`
 - `placeholders.md`, "Map and atlas" (pause animation cap, 12 items)
 - D24, D32, D121, D125, D157, D160, D162
 - ADR-0001 (label collision), for the same import-boundary problem
