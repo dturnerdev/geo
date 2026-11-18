@@ -35,6 +35,12 @@ If a feature file names a different path or package, the feature file wins.
 | Globe labels | troika-three-text | FE06 |
 | Confirm by ADR in M0 | Build: Vite. Web offline: vite-plugin-pwa. Unit tests: Vitest. Property tests: fast-check. Lint: ESLint, Prettier. Android E2E driver. Tools runtime: Node LTS | – |
 
+| Package | Version | Licence | Used by |
+|---------|---------|---------|---------|
+| `three` | 0.187.0 | MIT | FE06 (globe and flat map) |
+| `d3-geo` | 3.1.2 | ISC | FE06 (flat map projection and inverse projection) |
+| `troika-three-text` | 0.53.1 | MIT | FE06 (labels) |
+
 A new runtime dependency needs a PR that adds it to the allowlist with a
 reason (D107, AC-29.3). Never: analytics, ads, crash reporting, remote config
 or any SDK that contacts a third party.
