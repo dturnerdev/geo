@@ -56,12 +56,18 @@ and let users back up, merge and delete their data.
    | `payload` | object | Per type, Zod-validated |
 
 2. MVP event types: `ItemMet`, `AnswerRecorded` (rating, level, format, raw
-   response, stored geometry, aids/hints used, surprise flag, round seed),
+   response, stored geometry, aids/hints used, surprise flag, round seed, `responseTimeMs`),
    `RoundStarted`, `RoundEnded`, `RoundParked`, `RoundResumed`,
    `SettingChanged`, `ExperimentAssigned`, `ExperimentExposed`,
    `ParametersAdopted`, `EmphasisAdded`, `EmphasisEnded`,
    `DailyChallengeCompleted`, `ContentPackApplied`, `ImportCompleted`.
    New types need a spec change.
+   - **Response time:** `responseTimeMs` is whole milliseconds from the
+     moment the question is fully shown and accepts input to the moment the
+     answer is submitted. Time with the app in the background is excluded.
+     Required on every `AnswerRecorded`. Stored as measured, never capped.
+     Caps such as FE04's 60 s active-practice cap apply only when metrics
+     are computed.
 3. `append` writes all given events in **one transaction** before the next
    question appears. Nothing ever updates or deletes an event row.
 4. **Ordering:** by `at`, then `id`.
@@ -87,7 +93,7 @@ and let users back up, merge and delete their data.
        format version supported.
     2. Show a preview: answers in the file, date range, how many are new to this device.
     3. On confirm, insert only events whose `id` isn't present, in one transaction.
-    4. Rebuild state from the merged log. Append `ImportCompleted { added, skipped, sourceExportedAt }`.
+    4. Rebuild state from the merged log. Append `ImportCompleted { added, skipped, sourceExportedAt }` only when at least one event is added. A duplicate import adds no events at all.
     5. Settings: last-writer-wins by `at`.
     6. Experiment assignment always uses this install's ID. Imported
        `ExperimentAssigned` events from other origins are kept but ignored for assignment.
@@ -150,6 +156,7 @@ Adapters: `SqliteNativeStore`, `SqliteWasmStore`, `InMemoryStore`. All pass one 
   included (CI manifest check).
 - **AC-01.12** After "Delete everything", the store is empty and the install ID differs.
 - **AC-01.13** A simulated full disk shows S21 with export; the pending answer is not lost while the app stays open.
+- **AC-01.14** Every `AnswerRecorded` has a whole-number `responseTimeMs` ≥ 0, and time in the background is not counted (unit test).
 
 ### Out of scope
 Accounts, sync, server storage (post-MVP; the envelope already supports them).
@@ -254,6 +261,10 @@ experiments with internal testers, without app updates.
    - Recorded once as `ExperimentAssigned`.
    - Sticky until the experiment version changes.
    - `hash32` is implemented in `engine/random.ts` with published test vectors.
+   - **Hashing:** `hash32` is FNV-1a 32-bit over the UTF-8 bytes of the
+     input string, returned as an unsigned 32-bit integer. Test vectors:
+     `""` → `0x811c9dc5`, `"a"` → `0xe40c292c`, `"foobar"` → `0xbf9cf968`. The
+     input string is built as `installId + ':' + experimentId + ':' + version`.
 5. **Exposure:** `ExperimentExposed` is logged the first time in a session
    that a variant actually changes what the user sees.
 6. **Changes** from a new pack take effect at the next pause (D163).
@@ -286,6 +297,7 @@ The engine receives a resolved, immutable `FlagSnapshot` per round. It never rea
 - **AC-03.4** With "No time pressure" on, E01 can never produce auto-continue (property test).
 - **AC-03.5** A flag switched off in a new pack changes behaviour at the next pause, not mid-round.
 - **AC-03.6** CI fails for an experiment without a complete `experiments/Exx.md`.
+- **AC-03.7** `hash32` matches the FNV-1a 32-bit test vectors in the spec (unit test).
 
 ### Out of scope
 Server-side experiment analysis (tools/ scripts handle tester summaries).
@@ -315,7 +327,7 @@ technical log, and let testers share a counts-only summary.
    | Transfer | Correct share in a format never used before for that item-facet | Secondary |
    | Return after gaps, session length spread | Descriptive only | Guardrail, never a target |
 
-2. **Active practice time:** sum of per-answer response times, each capped
+2. **Active practice time:** sum of per-answer response times (`AnswerRecorded.responseTimeMs`), each capped
    at 60 s (placeholder). Idle and parked time never counts.
 3. **"Show me"** is counted separately from incorrect answers in every metric.
 4. **Minimum sample (placeholders):** below this, a metric returns `null` and
