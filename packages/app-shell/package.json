@@ -7,6 +7,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
+    "@geo/content": "workspace:*",
     "@geo/domain": "workspace:*",
     "@geo/storage": "workspace:*",
     "zod": "4.6.7"

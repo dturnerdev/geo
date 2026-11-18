@@ -1,5 +1,6 @@
 export * from './append.ts';
 export * from './clock.ts';
+export * from './content.ts';
 export * from './event-factory.ts';
 export * from './export.ts';
 export * from './gzip.ts';

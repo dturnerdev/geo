@@ -49,6 +49,9 @@ importers:
       '@geo/app-shell':
         specifier: workspace:*
         version: link:../../packages/app-shell
+      '@geo/content':
+        specifier: workspace:*
+        version: link:../../packages/content
       '@geo/domain':
         specifier: workspace:*
         version: link:../../packages/domain
@@ -62,6 +65,9 @@ importers:
 
   packages/app-shell:
     dependencies:
+      '@geo/content':
+        specifier: workspace:*
+        version: link:../content
       '@geo/domain':
         specifier: workspace:*
         version: link:../domain
@@ -74,7 +80,14 @@ importers:
 
   packages/audio: {}
 
-  packages/content: {}
+  packages/content:
+    dependencies:
+      '@geo/domain':
+        specifier: workspace:*
+        version: link:../domain
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
 
   packages/domain:
     dependencies:
