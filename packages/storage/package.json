@@ -7,6 +7,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@geo/domain": "workspace:*"
+    "@geo/domain": "workspace:*",
+    "@sqlite.org/sqlite-wasm": "3.54.1-build1"
   }
 }

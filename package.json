@@ -14,6 +14,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
+    "e2e": "playwright test",
     "gate:1": "pnpm typecheck",
     "gate:2": "pnpm lint && pnpm format:check && node tools/ci/src/check-boundaries.ts && node tools/ci/src/check-strings.ts && node tools/ci/src/check-locales.ts",
     "gate:7": "pnpm test && node tools/ci/src/check-spec-references.ts",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@eslint/js": "9.39.5",
     "@formatjs/icu-messageformat-parser": "3.5.23",
+    "@playwright/test": "1.65.1",
     "@types/node": "22.20.5",
     "eslint": "9.39.5",
     "eslint-config-prettier": "10.1.8",

@@ -7,8 +7,11 @@ entry. Update this table in the same PR that adds or removes a dependency
 
 | Package or asset | Version | Licence | Use |
 |---|---|---|---|
+| `@capacitor-community/sqlite` | 8.1.1 | MIT | Android SQLite persistence |
 | `@eslint/js` | 9.39.5 | MIT | Lint configuration |
 | `@formatjs/icu-messageformat-parser` | 3.5.23 | BSD-3-Clause | ICU message validation (gate 2) |
+| `@playwright/test` | 1.65.1 | Apache-2.0 | Desktop Chromium E2E tests |
+| `@sqlite.org/sqlite-wasm` | 3.54.1-build1 | Apache-2.0 | Web SQLite persistence |
 | `@types/node` | 22.20.5 | MIT | Node type definitions |
 | `eslint` | 9.39.5 | MIT | Lint (gate 2) |
 | `eslint-config-prettier` | 10.1.8 | MIT | Lint and format integration |
