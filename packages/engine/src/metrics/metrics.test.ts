@@ -57,7 +57,7 @@ const NOW = 200 * DAY_MS;
 
 function goldenFixture(): readonly DomainEvent[] {
   const events: DomainEvent[] = [
-    makeEvent('ExperimentAssigned', { experimentId: 'E01', variant: 'A' }, 0),
+    makeEvent('ExperimentAssigned', { experimentId: 'E01', variant: 'A', version: 1 }, 0),
     makeEvent('ExperimentExposed', { experimentId: 'E01', variant: 'A', surface: 'round' }, 0),
   ];
   for (let index = 0; index < 20; index += 1) {

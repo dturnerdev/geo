@@ -1,4 +1,5 @@
 export * from './events.ts';
+export * from './flags.ts';
 export * from './ids.ts';
 export * from './locale.ts';
 export * from './ordering.ts';

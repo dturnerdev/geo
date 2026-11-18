@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./flags": "./src/flags/index.ts",
     "./geo": "./src/geo/index.ts",
     "./memory": "./src/memory/index.ts",
     "./metrics": "./src/metrics/index.ts",

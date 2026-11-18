@@ -1,3 +1,4 @@
+import { experimentDefinitionSchema, packFlagSchema } from '@geo/domain';
 import { z } from 'zod';
 import { canonicalJson } from './canonical-json.ts';
 import { equalBytes, utf8Encode } from './bytes.ts';
@@ -39,16 +40,12 @@ export type PackChunkDescriptor = z.infer<typeof packChunkDescriptorSchema>;
 export type PackManifest = z.infer<typeof packManifestSchema>;
 
 const itemSchema = z.object({ id: z.string().min(1) }).passthrough();
-const flagSchema = z.object({ id: z.string().min(1), default: z.unknown() }).passthrough();
-const experimentSchema = z
-  .object({ id: z.string().min(1), version: z.number().int().nonnegative() })
-  .passthrough();
 
 export const packPayloadSchema = z
   .object({
     items: z.array(itemSchema).default([]),
-    flags: z.array(flagSchema).default([]),
-    experiments: z.array(experimentSchema).default([]),
+    flags: z.array(packFlagSchema).default([]),
+    experiments: z.array(experimentDefinitionSchema).default([]),
     tuning: z.record(z.string(), z.unknown()).default({}),
     daily: z
       .object({
@@ -61,16 +58,16 @@ export const packPayloadSchema = z
 
 export type PackPayload = z.infer<typeof packPayloadSchema>;
 export type PackItem = z.infer<typeof itemSchema>;
-export type PackFlag = z.infer<typeof flagSchema>;
-export type PackExperiment = z.infer<typeof experimentSchema>;
+export type PackFlag = z.infer<typeof packFlagSchema>;
+export type PackExperiment = z.infer<typeof experimentDefinitionSchema>;
 
 // Chunks may contain any subset of the payload. Merging is deterministic and
 // independent of chunk order for arrays (FE02 behaviour 3).
 export const packPartSchema = z
   .object({
     items: z.array(itemSchema).optional(),
-    flags: z.array(flagSchema).optional(),
-    experiments: z.array(experimentSchema).optional(),
+    flags: z.array(packFlagSchema).optional(),
+    experiments: z.array(experimentDefinitionSchema).optional(),
     tuning: z.record(z.string(), z.unknown()).optional(),
     daily: z
       .object({

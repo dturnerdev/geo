@@ -51,7 +51,7 @@ export function fixtureEvents(): readonly DomainEvent[] {
     fixtureEvent('RoundParked', { roundId: 'round-1', reason: 'background' }),
     fixtureEvent('RoundResumed', { roundId: 'round-1' }),
     fixtureEvent('SettingChanged', { key: 'units', value: 'metric' }),
-    fixtureEvent('ExperimentAssigned', { experimentId: 'E01', variant: 'A' }),
+    fixtureEvent('ExperimentAssigned', { experimentId: 'E01', variant: 'A', version: 1 }),
     fixtureEvent('ExperimentExposed', {
       experimentId: 'E01',
       variant: 'A',
@@ -102,6 +102,28 @@ describe('event fixtures', () => {
         expect(upgraded.value).toEqual(fixture);
         expect(upgraded.value.schema).toBe(CURRENT_EVENT_SCHEMA[fixture.type]);
       }
+    }
+  });
+
+  it('AC-01.9 reads a historic ExperimentAssigned v1 payload through its upgrader', () => {
+    const upgraded = upgradeDomainEvent({
+      id: '0192f000-0000-7000-8000-0000000000bb',
+      type: 'ExperimentAssigned',
+      schema: 1,
+      at: 1,
+      tz: 'UTC',
+      origin: '0192f000-0000-7000-8000-0000000000aa',
+      contextId: 1,
+      payload: { experimentId: 'E01', variant: 'A' },
+    });
+    expect(upgraded.ok).toBe(true);
+    if (upgraded.ok) {
+      expect(upgraded.value.schema).toBe(2);
+      expect(upgraded.value.payload).toEqual({
+        experimentId: 'E01',
+        variant: 'A',
+        version: 0,
+      });
     }
   });
 

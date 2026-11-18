@@ -85,6 +85,8 @@ export const settingChangedPayloadSchema = z.object({
 export const experimentAssignedPayloadSchema = z.object({
   experimentId: z.string().min(1),
   variant: z.string().min(1),
+  // Sticky until the experiment version changes (FE03 behaviour 4).
+  version: z.number().int().nonnegative(),
 });
 
 export const experimentExposedPayloadSchema = z.object({
@@ -158,7 +160,7 @@ export const CURRENT_EVENT_SCHEMA = {
   RoundParked: 1,
   RoundResumed: 1,
   SettingChanged: 1,
-  ExperimentAssigned: 1,
+  ExperimentAssigned: 2,
   ExperimentExposed: 1,
   ParametersAdopted: 1,
   EmphasisAdded: 1,

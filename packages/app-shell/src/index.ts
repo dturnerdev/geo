@@ -3,6 +3,7 @@ export * from './clock.ts';
 export * from './content.ts';
 export * from './event-factory.ts';
 export * from './export.ts';
+export * from './flags.ts';
 export * from './gzip.ts';
 export * from './identity.ts';
 export * from './ids.ts';

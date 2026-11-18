@@ -1,0 +1,82 @@
+{
+  "flags": [
+    {
+      "id": "autoContinue",
+      "default": false,
+      "description": "Allow the pause to continue automatically after a short delay (E01).",
+      "owner": "FE27",
+      "reviewDate": "2027-05-18"
+    },
+    {
+      "id": "chapterEnd",
+      "default": true,
+      "description": "Offer the chapter-end pause when fatigue or the session limit is reached (E08).",
+      "owner": "FE27",
+      "reviewDate": "2027-05-18"
+    },
+    {
+      "id": "dailyChallenge",
+      "default": false,
+      "description": "Show the daily challenge slot after the warmup (FE21).",
+      "owner": "FE21",
+      "reviewDate": "2027-05-18"
+    },
+    {
+      "id": "modelTrial",
+      "default": false,
+      "description": "Use the FSRS-7 trial parameters instead of FSRS-6 (E09).",
+      "owner": "FE13",
+      "reviewDate": "2027-05-18"
+    },
+    {
+      "id": "points",
+      "default": false,
+      "description": "Show the optional round score at the pause (E03).",
+      "owner": "FE27",
+      "reviewDate": "2027-05-18"
+    }
+  ],
+  "experiments": [
+    {
+      "id": "E01",
+      "version": 1,
+      "flag": "autoContinue",
+      "register": "experiments/E01.md",
+      "variants": [
+        { "id": "A", "weight": 5000, "flagValue": false },
+        { "id": "B", "weight": 5000, "flagValue": true }
+      ]
+    },
+    {
+      "id": "E03",
+      "version": 1,
+      "flag": "points",
+      "register": "experiments/E03.md",
+      "variants": [
+        { "id": "A", "weight": 5000, "flagValue": false },
+        { "id": "B", "weight": 2500, "flagValue": true },
+        { "id": "C", "weight": 2500, "flagValue": true }
+      ]
+    },
+    {
+      "id": "E08",
+      "version": 1,
+      "flag": "chapterEnd",
+      "register": "experiments/E08.md",
+      "variants": [
+        { "id": "A", "weight": 5000, "flagValue": true },
+        { "id": "B", "weight": 5000, "flagValue": false }
+      ]
+    },
+    {
+      "id": "E09",
+      "version": 1,
+      "flag": "modelTrial",
+      "register": "experiments/E09.md",
+      "variants": [
+        { "id": "A", "weight": 5000, "flagValue": false },
+        { "id": "B", "weight": 5000, "flagValue": true }
+      ]
+    }
+  ]
+}

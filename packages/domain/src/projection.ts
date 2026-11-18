@@ -16,6 +16,7 @@ export interface SettingValue {
 
 export interface ExperimentValue {
   readonly variant: string;
+  readonly version: number;
   readonly at: number;
   readonly eventId: EventId;
 }
@@ -105,6 +106,7 @@ export function projectEvents(
         if (options.installOrigin === undefined || options.installOrigin === event.origin) {
           experiments[event.payload.experimentId] = {
             variant: event.payload.variant,
+            version: event.payload.version,
             at: event.at,
             eventId: event.id,
           };

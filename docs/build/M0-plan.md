@@ -16,7 +16,7 @@ Source: `docs/spec/05-features/m0-foundations.md` and referenced architecture/qu
 | 1 | FE05 Localisation, units and time | `packages/domain`, `packages/engine/time`, `packages/ui`, `packages/app-shell` | FE01 | AC-05.1–AC-05.8 | Done (device/manual skips recorded) |
 | 1 | FE04 Local metrics and diagnostics | `packages/engine/metrics`, `packages/storage`, `packages/ui`, `packages/app-shell` | FE01 | AC-04.1–AC-04.11 | Done (device/hosted skips recorded) |
 | 2 | FE02 Content packs and updates | `packages/content`, `packages/app-shell`, `apps/web`, `apps/android` | FE01 | AC-02.1–AC-02.8 | Done (device/hosted skips recorded) |
-| 3 | FE03 Feature flags and experiments | `packages/domain`, `packages/engine`, `packages/content`, `packages/ui`, `packages/app-shell` | FE01, FE02 | AC-03.1–AC-03.6 | Ready |
+| 3 | FE03 Feature flags and experiments | `packages/domain`, `packages/engine`, `packages/content`, `packages/ui`, `packages/app-shell` | FE01, FE02 | AC-03.1–AC-03.6 | Done (device/bundle skips recorded) |
 
 ## Notes
 

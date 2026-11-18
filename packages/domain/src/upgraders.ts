@@ -23,7 +23,12 @@ export const PAYLOAD_UPGRADERS: Readonly<
   RoundParked: {},
   RoundResumed: {},
   SettingChanged: {},
-  ExperimentAssigned: {},
+  ExperimentAssigned: {
+    // v1 predated the version field. Treat it as an obsolete assignment so a
+    // current pack reassigns at the next pause (FE03 behaviour 4).
+    1: (payload) =>
+      typeof payload === 'object' && payload !== null ? { ...payload, version: 0 } : payload,
+  },
   ExperimentExposed: {},
   ParametersAdopted: {},
   EmphasisAdded: {},

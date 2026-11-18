@@ -20,7 +20,11 @@ function seedStore(): {
     makeAnswer(factory, 1_002, 'country-fr'),
     makeAnswer(factory, 1_003, 'country-de'),
     makeSetting(factory, 1_004, 'units', 'metric'),
-    factory.create('ExperimentAssigned', { experimentId: 'E01', variant: 'A' }, { at: 1_005 }),
+    factory.create(
+      'ExperimentAssigned',
+      { experimentId: 'E01', variant: 'A', version: 1 },
+      { at: 1_005 },
+    ),
     factory.create(
       'ParametersAdopted',
       {
