@@ -144,7 +144,7 @@ CP = content pipeline.
 | D113 | `{ lng, lat }` named fields. Pairs only in GeoJSON I/O. Branded `LngLat` | Active | All |
 | D114 | At most 6 decimal places | Active | CP |
 | D115 | Game maths on a sphere, R = 6,371.0088 km. Metres, degrees, clockwise from true north | Active | FE11 |
-| D116 | Published distances computed with geographiclib in the pipeline, shown rounded | Active | CP |
+| D116 | Published distances computed with geographiclib in the pipeline. Displayed distances use one decimal place below 10 display units and whole units above | Active | CP |
 | D117 | Geometry computed once at answer time and stored in the event | Active | FE01, FE11 |
 | D118 | Taps graded by the engine against pipeline tap zones. Small items enlarged | Active | FE06, FE11 |
 | D119 | Own Three.js globe. No Cesium, no MapLibre in MVP | Active | FE06 |
