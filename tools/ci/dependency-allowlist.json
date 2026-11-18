@@ -12,6 +12,7 @@
     "typescript",
     "typescript-eslint",
     "vite",
-    "vitest"
+    "vitest",
+    "zod"
   ]
 }

@@ -1,7 +1,26 @@
-// Web entry scaffold (07 §3). Screens and app-shell wiring land with FE01.
-export {};
+import { createWebEventStore } from './storage.ts';
+import { TabCoordinator } from './tab-lock.ts';
 
-const root = document.querySelector<HTMLDivElement>('#app');
-if (root !== null) {
-  root.dataset.ready = 'true';
+async function bootstrap(): Promise<void> {
+  const root = document.querySelector<HTMLDivElement>('#app');
+  const tab = new TabCoordinator();
+  const lock = await tab.claim();
+
+  if (lock === 'locked-elsewhere') {
+    if (root !== null) {
+      root.dataset.screen = 'S19';
+    }
+    return;
+  }
+
+  const storage = await createWebEventStore();
+  if (root !== null) {
+    root.dataset.ready = 'true';
+    root.dataset.storage = storage.kind;
+    if (storage.kind === 'opfs-unavailable') {
+      root.dataset.screen = storage.screen;
+    }
+  }
 }
+
+void bootstrap();

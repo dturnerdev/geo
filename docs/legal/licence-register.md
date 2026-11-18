@@ -19,6 +19,7 @@ entry. Update this table in the same PR that adds or removes a dependency
 | `typescript-eslint` | 8.73.0 | MIT | Type-aware lint (gate 2) |
 | `vite` | 7.3.8 | MIT | Web build (gate 8) |
 | `vitest` | 3.2.7 | MIT | Unit and property tests (gate 7) |
+| `zod` | 4.6.7 | MIT | Boundary validation for domain events and persistence |
 
 ## Audio
 

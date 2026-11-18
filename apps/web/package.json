@@ -10,5 +10,10 @@
   },
   "devDependencies": {
     "vite": "7.3.8"
+  },
+  "dependencies": {
+    "@geo/app-shell": "workspace:*",
+    "@geo/domain": "workspace:*",
+    "@geo/storage": "workspace:*"
   }
 }
