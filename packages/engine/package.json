@@ -1,0 +1,15 @@
+{
+  "name": "@geo/engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./geo": "./src/geo/index.ts",
+    "./memory": "./src/memory/index.ts",
+    "./metrics": "./src/metrics/index.ts",
+    "./time": "./src/time/index.ts",
+    "./tuning": "./src/tuning.ts",
+    "./random": "./src/random.ts"
+  }
+}

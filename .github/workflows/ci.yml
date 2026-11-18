@@ -1,0 +1,134 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  gate-1-typecheck:
+    name: 'Gate 1 · type check'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.0.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm gate:1
+
+  gate-2-lint:
+    name: 'Gate 2 · lint, format, boundaries, strings, locales'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.0.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm gate:2
+
+  gate-7-tests:
+    name: 'Gate 7 · unit tests, AC coverage, spec references'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.0.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm gate:7
+
+  gate-8-size:
+    name: 'Gate 8 · size budgets and bundle inspection'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.0.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm gate:8
+
+  gate-9-supply-chain:
+    name: 'Gate 9 · allowlist, pins, licences, audio'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.0.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm gate:9
+
+  gate-11-android-manifest:
+    name: 'Gate 11 · Android manifest'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.0.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm gate:11
+
+  # Gates 3, 4, 5, 6 and 10 stub-pass until their feature lands (09 §3).
+  gate-3-reference-replay:
+    name: 'Gate 3 · reference replay (stub)'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Stub-pass until the replay fixtures and browser runners land (gate 3).'
+
+  gate-4-simulation:
+    name: 'Gate 4 · simulation harness (stub)'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Stub-pass until FE18 lands (gate 4).'
+
+  gate-5-e2e-network:
+    name: 'Gate 5 · E2E and network audit (stub)'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Stub-pass until the Playwright and Android E2E suites land (gate 5).'
+
+  gate-6-screenshots-a11y:
+    name: 'Gate 6 · screenshots and accessibility (stub)'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Stub-pass until reference screenshots and axe-core land (gate 6).'
+
+  gate-10-content-pipeline:
+    name: 'Gate 10 · content pipeline and signing (stub)'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Stub-pass until FE02 and the content pipeline land (gate 10).'

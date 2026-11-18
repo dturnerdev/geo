@@ -1,0 +1,17 @@
+{
+  "comment": "Every external dependency needs a human-reviewed entry here (D107, AC-29.3).",
+  "dependencies": [
+    "@eslint/js",
+    "@formatjs/icu-messageformat-parser",
+    "@types/node",
+    "eslint",
+    "eslint-config-prettier",
+    "fast-check",
+    "globals",
+    "prettier",
+    "typescript",
+    "typescript-eslint",
+    "vite",
+    "vitest"
+  ]
+}
