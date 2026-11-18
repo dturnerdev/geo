@@ -1,0 +1,21 @@
+{
+  "comment": "Every external dependency needs a human-reviewed entry here (D107, AC-29.3).",
+  "dependencies": [
+    "@eslint/js",
+    "@formatjs/icu-messageformat-parser",
+    "@capacitor-community/sqlite",
+    "@playwright/test",
+    "@sqlite.org/sqlite-wasm",
+    "@types/node",
+    "eslint",
+    "eslint-config-prettier",
+    "fast-check",
+    "globals",
+    "prettier",
+    "typescript",
+    "typescript-eslint",
+    "vite",
+    "vitest",
+    "zod"
+  ]
+}
