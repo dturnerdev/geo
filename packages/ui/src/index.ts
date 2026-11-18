@@ -1,2 +1,2 @@
-// Package scaffold (07 §3). Feature code lands with its milestone.
-export {};
+export * from './format.ts';
+export * from './metrics.ts';

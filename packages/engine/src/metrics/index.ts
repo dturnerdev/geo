@@ -1,2 +1,4 @@
-// Engine subpackage scaffold (07 §3). Feature code lands with its milestone.
-export {};
+export * from './analysis.ts';
+export * from './calibration.ts';
+export * from './compute.ts';
+export * from './types.ts';
