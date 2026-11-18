@@ -2,12 +2,18 @@ import { InMemoryStore, SqliteWasmStore, type EventStore } from '@geo/storage';
 import { createWorkerSqlDriver, spawnSqliteWasmWorker } from './sqlite-worker-client.ts';
 
 export type WebStorageStatus =
-  | { readonly kind: 'ready'; readonly store: EventStore; readonly opfs: true }
+  | {
+      readonly kind: 'ready';
+      readonly store: EventStore;
+      readonly opfs: true;
+      readonly close: () => Promise<void>;
+    }
   | {
       readonly kind: 'opfs-unavailable';
       readonly store: EventStore;
       readonly opfs: false;
       readonly screen: 'S21';
+      readonly close: () => Promise<void>;
     };
 
 interface StorageManagerLike {
@@ -40,6 +46,7 @@ export async function createWebEventStore(): Promise<WebStorageStatus> {
       store: new InMemoryStore(),
       opfs: false,
       screen: 'S21',
+      close: () => Promise.resolve(),
     };
   }
 
@@ -52,6 +59,9 @@ export async function createWebEventStore(): Promise<WebStorageStatus> {
       kind: 'ready',
       store: new SqliteWasmStore(driver),
       opfs: true,
+      // A Web Lock takeover must close the previous holder's OPFS access
+      // handles before the next tab can open the same database (D108).
+      close: () => driver.close(),
     };
   } catch {
     await driver.close();
@@ -60,6 +70,7 @@ export async function createWebEventStore(): Promise<WebStorageStatus> {
       store: new InMemoryStore(),
       opfs: false,
       screen: 'S21',
+      close: () => Promise.resolve(),
     };
   }
 }

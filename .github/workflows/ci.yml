@@ -116,10 +116,20 @@ jobs:
       - run: echo 'Stub-pass until FE18 lands (gate 4).'
 
   gate-5-e2e-network:
-    name: 'Gate 5 · E2E and network audit (stub)'
+    name: 'Gate 5 · web E2E and network audit'
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'Stub-pass until the Playwright and Android E2E suites land (gate 5).'
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.0.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm e2e
 
   gate-6-screenshots-a11y:
     name: 'Gate 6 · screenshots and accessibility (stub)'
