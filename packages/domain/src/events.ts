@@ -56,6 +56,10 @@ export const answerRecordedPayloadSchema = z.object({
   hintsUsed: z.number().int().nonnegative(),
   surprise: z.boolean(),
   roundSeed: z.string().min(1),
+  // Whole milliseconds. Time in the background is excluded and the measured
+  // value is stored as-is; metric caps apply only when metrics are computed
+  // (FE01 behaviour 2, AC-01.14).
+  responseTimeMs: z.number().int().nonnegative(),
 });
 
 export const roundStartedPayloadSchema = z.object({

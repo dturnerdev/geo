@@ -20,6 +20,38 @@ describe('persistence behaviour', () => {
     // Skipped: reference hardware is not available locally.
   });
 
+  it.skip('AC-01.14 time in the background is not counted', () => {
+    // Skipped: response-time measurement belongs to the play UI and round
+    // controller, which is carried forward to M2.
+  });
+
+  it('AC-01.14 append rejects a missing, non-whole or negative responseTimeMs', async () => {
+    const { factory } = testFactory();
+    const valid = makeAnswer(factory, 1_000);
+    const payload: Record<string, unknown> = { ...valid.payload };
+
+    const missing: Record<string, unknown> = { ...payload };
+    delete missing['responseTimeMs'];
+    const invalidPayloads: readonly unknown[] = [
+      missing,
+      { ...payload, responseTimeMs: 1.5 },
+      { ...payload, responseTimeMs: -1 },
+      { ...payload, responseTimeMs: Number.NaN },
+      { ...payload, responseTimeMs: '1200' },
+    ];
+
+    for (const invalidPayload of invalidPayloads) {
+      const store = new InMemoryStore();
+      const event = { ...valid, payload: invalidPayload } as unknown as DomainEvent;
+      const result = await store.append([event]);
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.kind).toBe('corrupt');
+      }
+      expect(await store.count()).toBe(0);
+    }
+  });
+
   it('rebuilds 10,000 events on this host without loading a snapshot', async () => {
     const store = new InMemoryStore();
     const { factory, identity } = testFactory();

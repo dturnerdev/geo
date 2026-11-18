@@ -11,6 +11,13 @@ describe('FE03 deterministic randomness', () => {
     expect(hash32('install:E01:1')).toBe(0xa2ea731f);
   });
 
+  it('AC-03.7 hash32 matches the FNV-1a 32-bit test vectors in the spec', () => {
+    // FE03 Hashing: FNV-1a 32-bit over the UTF-8 bytes, unsigned result.
+    expect(hash32('')).toBe(0x811c9dc5);
+    expect(hash32('a')).toBe(0xe40c292c);
+    expect(hash32('foobar')).toBe(0xbf9cf968);
+  });
+
   it.skip('AC-03.1 hash32 matches the same vectors on the Android device', () => {
     // Skipped: the Android E2E runner and devices are not available here. The
     // implementation uses only integer operations, so it is platform-neutral.

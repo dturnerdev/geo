@@ -40,19 +40,11 @@ export function isShowMe(answer: AnswerRecordedPayload): boolean {
   return isRecord(response) && response['kind'] === 'showMe';
 }
 
-// Response times are part of active practice time. The FE01 schema stores the
-// grader input as an unknown response, so the timing is read from the response
-// when present. A missing reading contributes no time rather than a guess.
+// The measured response time is a required AnswerRecorded payload field
+// (FE01 behaviour 2). It is read directly; the 60 s active-practice cap is
+// applied only when metrics are computed (FE04 behaviour 2).
 export function responseTimeMs(answer: AnswerRecordedPayload): number {
-  const response = answer.response;
-  if (!isRecord(response)) {
-    return 0;
-  }
-  const value = response['responseTimeMs'];
-  if (typeof value !== 'number' || !Number.isFinite(value) || value < 0) {
-    return 0;
-  }
-  return value;
+  return answer.responseTimeMs;
 }
 
 export function parseAnswer(event: AnswerEventLike): ParsedAnswer {

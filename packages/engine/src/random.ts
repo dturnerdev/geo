@@ -35,7 +35,8 @@ function utf8Bytes(input: string): readonly number[] {
   return bytes;
 }
 
-// FNV-1a, 32-bit. Published vectors (also asserted by AC-03.1):
+// FNV-1a, 32-bit, over the UTF-8 bytes. Published vectors (also asserted by
+// AC-03.1 and AC-03.7):
 // "" = 0x811c9dc5, "a" = 0xe40c292c, "foobar" = 0xbf9cf968.
 export function hash32(input: string): number {
   let hash = FNV_OFFSET_BASIS;

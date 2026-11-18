@@ -70,7 +70,12 @@ export function testFactory(clock = new TestClock()): TestFactory {
   };
 }
 
-export function makeAnswer(factory: EventFactory, at: number, itemId = 'country-fr'): DomainEvent {
+export function makeAnswer(
+  factory: EventFactory,
+  at: number,
+  itemId = 'country-fr',
+  responseTimeMs = 1_200,
+): DomainEvent {
   return factory.create(
     'AnswerRecorded',
     {
@@ -85,6 +90,7 @@ export function makeAnswer(factory: EventFactory, at: number, itemId = 'country-
       hintsUsed: 0,
       surprise: false,
       roundSeed: 'seed-1',
+      responseTimeMs,
     },
     { at },
   );

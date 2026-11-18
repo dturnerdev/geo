@@ -205,6 +205,59 @@ describe('export and import', () => {
     }
   });
 
+  it('AC-01.14 import rejects a missing, non-whole or negative responseTimeMs', async () => {
+    const original = seedStore();
+    await original.store.append(original.events);
+    const lines = await exportProgressJsonLines(original.store, {
+      appVersion: '0.0.0',
+      exportedAt: 1_500,
+      contexts: original.contexts,
+    });
+    if (!lines.ok) {
+      throw new Error('export failed');
+    }
+
+    const parts = lines.value.trimEnd().split('\n');
+    const header = JSON.parse(parts[0] ?? '{}') as ExportHeader;
+    const bodyLines = parts.slice(1);
+    const answerIndex = bodyLines.findIndex(
+      (line) => (JSON.parse(line) as { type?: string }).type === 'AnswerRecorded',
+    );
+    expect(answerIndex).toBeGreaterThanOrEqual(0);
+
+    const answer = JSON.parse(bodyLines[answerIndex] ?? '{}') as {
+      payload: Record<string, unknown>;
+    };
+    const missingPayload: Record<string, unknown> = { ...answer.payload };
+    delete missingPayload['responseTimeMs'];
+    const variants: readonly unknown[] = [
+      { ...answer, payload: missingPayload },
+      { ...answer, payload: { ...answer.payload, responseTimeMs: 1.5 } },
+      { ...answer, payload: { ...answer.payload, responseTimeMs: -1 } },
+      { ...answer, payload: { ...answer.payload, responseTimeMs: Number.NaN } },
+    ];
+
+    for (const variant of variants) {
+      const nextBody = [...bodyLines];
+      nextBody[answerIndex] = JSON.stringify(variant);
+      const bytes = new TextEncoder().encode(
+        `${JSON.stringify({
+          ...header,
+          eventCount: nextBody.length,
+          sha256: sha256Hex(nextBody.join('\n')),
+        })}\n${nextBody.join('\n')}\n`,
+      );
+
+      const store = new InMemoryStore();
+      const parsed = await parseImportFile(store, bytes);
+      expect(parsed.ok).toBe(false);
+      if (!parsed.ok) {
+        expect(parsed.error.kind).toBe('corrupt');
+      }
+      expect(await store.count()).toBe(0);
+    }
+  });
+
   it('writes the documented filename and header shape', async () => {
     const { store, contexts } = seedStore();
     const lines = await exportProgressJsonLines(store, {
