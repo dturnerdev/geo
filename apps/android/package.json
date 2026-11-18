@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "manifest:check": "node ../../tools/ci/src/check-manifest.ts"
+    "manifest:check": "node ../../tools/ci/src/check-manifest.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "8.1.1"

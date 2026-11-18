@@ -3,10 +3,13 @@ import { describe, expect, it } from 'vitest';
 import type { EventStore } from './types.ts';
 import { answerEvent, makeEvent } from './test-helpers.ts';
 
-export function runEventStoreSuite(name: string, createStore: () => EventStore): void {
+export function runEventStoreSuite(
+  name: string,
+  createStore: () => EventStore | Promise<EventStore>,
+): void {
   describe(`EventStore suite: ${name}`, () => {
     it('AC-01.1 appends, counts and reads back in (at, id) order', async () => {
-      const store = createStore();
+      const store = await createStore();
       const later = answerEvent(2_000, 'country-de');
       const earlier = answerEvent(1_000, 'country-fr');
 
@@ -25,7 +28,7 @@ export function runEventStoreSuite(name: string, createStore: () => EventStore):
     });
 
     it('AC-01.1 appends a batch in one transaction or not at all', async () => {
-      const store = createStore();
+      const store = await createStore();
       const valid = answerEvent(1_000);
       const invalid = {
         ...answerEvent(2_000),
@@ -38,7 +41,7 @@ export function runEventStoreSuite(name: string, createStore: () => EventStore):
     });
 
     it('AC-01.1 importBatch inserts only missing ids and reports skipped', async () => {
-      const store = createStore();
+      const store = await createStore();
       const first = answerEvent(1_000, 'country-fr');
       const second = answerEvent(2_000, 'country-de');
       expect((await store.append([first])).ok).toBe(true);
@@ -52,7 +55,7 @@ export function runEventStoreSuite(name: string, createStore: () => EventStore):
     });
 
     it('AC-01.1 reads and writes snapshots', async () => {
-      const store = createStore();
+      const store = await createStore();
       const event = answerEvent(1_000);
       await store.append([event]);
       const snapshot = {
@@ -65,7 +68,7 @@ export function runEventStoreSuite(name: string, createStore: () => EventStore):
     });
 
     it('AC-01.1 wipe removes events and the snapshot', async () => {
-      const store = createStore();
+      const store = await createStore();
       const event = makeEvent('ItemMet', { itemId: 'country-fr' });
       await store.append([event]);
       await store.saveSnapshot({

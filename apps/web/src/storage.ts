@@ -1,4 +1,5 @@
 import { InMemoryStore, SqliteWasmStore, type EventStore } from '@geo/storage';
+import { createWorkerSqlDriver, spawnSqliteWasmWorker } from './sqlite-worker-client.ts';
 
 export type WebStorageStatus =
   | { readonly kind: 'ready'; readonly store: EventStore; readonly opfs: true }
@@ -29,9 +30,8 @@ export async function opfsAvailable(): Promise<boolean> {
   }
 }
 
-// The platform SQLite driver is a clearly scoped stub until
-// @sqlite.org/sqlite-wasm is approved. Until then this keeps the same logical
-// transaction contract but in memory, and never claims durability.
+// Web production storage: @sqlite.org/sqlite-wasm inside a dedicated Worker,
+// using the persisted OPFS SAH-pool VFS. The Worker owns all SQLite access.
 export async function createWebEventStore(): Promise<WebStorageStatus> {
   const available = await opfsAvailable();
   if (!available) {
@@ -42,11 +42,26 @@ export async function createWebEventStore(): Promise<WebStorageStatus> {
       screen: 'S21',
     };
   }
-  return {
-    kind: 'ready',
-    store: new SqliteWasmStore(new InMemoryStore()),
-    opfs: true,
-  };
+
+  const worker = spawnSqliteWasmWorker();
+  const driver = createWorkerSqlDriver(worker);
+  try {
+    // Forces the Worker to open the OPFS pool before we claim storage is ready.
+    await driver.select('SELECT 1 AS ready');
+    return {
+      kind: 'ready',
+      store: new SqliteWasmStore(driver),
+      opfs: true,
+    };
+  } catch {
+    await driver.close();
+    return {
+      kind: 'opfs-unavailable',
+      store: new InMemoryStore(),
+      opfs: false,
+      screen: 'S21',
+    };
+  }
 }
 
 // Ask for persistent storage after the first completed round, never at launch
