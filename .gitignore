@@ -17,3 +17,5 @@ apps/android/app/src/main/assets/public/
 # Natural Earth source data (downloaded, not committed)
 content/sources/natural-earth/*
 !content/sources/natural-earth/*.toml
+
+.supervisor/
