@@ -26,10 +26,9 @@ describe('FE12 captions and feedback', () => {
     });
   });
 
-  it.skip('AC-12.7 the mounted web UI shows the caption during playback (E2E)', () => {
-    // Skipped: the web play screen and voice asset set are not part of this
-    // FE12 slice, and Playwright has no mounted audio surface to assert against.
-  });
+  it.todo(
+    'AC-12.7 the mounted web UI shows the caption during playback (E2E) — not done: the web play screen and voice asset set are not part of this FE12 slice, and Playwright has no mounted audio surface to assert against.',
+  );
 
   it('AC-12.3 the haptics setting is hidden when the platform is unsupported', () => {
     expect(hapticsSettingVisible(false)).toBe(false);

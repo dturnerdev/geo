@@ -72,21 +72,21 @@ Each M2 AC appears exactly once.
 
 | AC | Status | Evidence |
 |---|---|---|
-| AC-11.1 | not done | `packages/engine/grading/index.test.ts` skipped — no per-primitive golden target payloads |
+| AC-11.1 | not done | `packages/engine/grading/index.test.ts` todo — no per-primitive golden target payloads |
 | AC-11.2 | pass | `packages/engine/grading/index.test.ts` — Show-me property |
-| AC-11.3 | not done | same test skipped — AidId values are unspecified |
-| AC-11.4 | not done | same test skipped — accepted-name/typing fixtures absent |
-| AC-11.5 | not done | same test skipped — pipeline guard list absent |
-| AC-11.6 | not done | same test skipped — bearing target/beam absent from Question |
+| AC-11.3 | not done | same test todo — AidId values are unspecified |
+| AC-11.4 | not done | same test todo — accepted-name/typing fixtures absent |
+| AC-11.5 | not done | same test todo — pipeline guard list absent |
+| AC-11.6 | not done | same test todo — bearing target/beam absent from Question |
 | AC-11.7 | pass | same test — no Easy without a speed baseline |
-| AC-11.8 | not done | same test skipped — FE06 tap-zone geometry not exposed |
+| AC-11.8 | not done | same test todo — FE06 tap-zone geometry not exposed |
 | AC-11.9 | skipped (physical device) | same test — Galaxy A07 4G required |
-| AC-11.10 | not done | same test skipped — event/geometry recorder boundary absent |
-| AC-11.11 | not done | same test skipped — Slovenia/Slovakia fixtures absent |
-| AC-11.12 | not done | same test skipped — Niger/Nigeria guard fixtures absent |
-| AC-11.13 | not done | same test skipped — Côte d’Ivoire locale fixture absent |
-| AC-11.14 | not done | same test skipped — bearing geometry absent |
-| AC-11.15 | not done | same test skipped — Malta/France/Russia/city/Nile geometry absent |
+| AC-11.10 | not done | same test todo — event/geometry recorder boundary absent |
+| AC-11.11 | not done | same test todo — Slovenia/Slovakia fixtures absent |
+| AC-11.12 | not done | same test todo — Niger/Nigeria guard fixtures absent |
+| AC-11.13 | not done | same test todo — Côte d’Ivoire locale fixture absent |
+| AC-11.14 | not done | same test todo — bearing geometry absent |
+| AC-11.15 | not done | same test todo — Malta/France/Russia/city/Nile geometry absent |
 
 ### FE12
 
@@ -108,23 +108,23 @@ Each M2 AC appears exactly once.
 | AC | Status | Evidence |
 |---|---|---|
 | AC-15.1 | pass | `packages/engine/src/session/index.test.ts` — identical deterministic round identity |
-| AC-15.2 | not done | same test skipped — Slot/load/mixing model is undefined/M3-owned |
-| AC-15.3 | not done | same test skipped — Slot/facet payload is undefined |
-| AC-15.4 | not done | same test skipped — Boss/outcome slot contract is undefined |
-| AC-15.5 | not done | same test skipped — FE14 priority/emphasis contract is undefined |
-| AC-15.6 | not done | same test skipped — no mounted app-shell round/E2E flow |
-| AC-15.7 | not done | same test skipped — UI string/screenshot surface absent |
-| AC-15.8 | not done | same test skipped — parking and unanswered-slot model is undefined |
+| AC-15.2 | not done | same test todo — Slot/load/mixing model is undefined/M3-owned |
+| AC-15.3 | not done | same test todo — Slot/facet payload is undefined |
+| AC-15.4 | not done | same test todo — Boss/outcome slot contract is undefined |
+| AC-15.5 | not done | same test todo — FE14 priority/emphasis contract is undefined |
+| AC-15.6 | not done | same test todo — no mounted app-shell round/E2E flow |
+| AC-15.7 | not done | same test todo — UI string/screenshot surface absent |
+| AC-15.8 | not done | same test todo — parking and unanswered-slot model is undefined |
 | AC-15.9 | skipped (physical device) | same test — Galaxy A07 4G benchmark required |
-| AC-15.10 | not done | same test skipped — stand-in source replacement contract is not wired |
-| AC-15.11 | not done | same test skipped — FE18 simulation harness and learner model are M3-owned |
+| AC-15.10 | not done | same test todo — stand-in source replacement contract is not wired |
+| AC-15.11 | not done | same test todo — FE18 simulation harness and learner model are M3-owned |
 
 ## Skipped tests with reasons
 
 Allowed skips are limited to manual, physical-device, hosted CI/release, or
 merged-manifest checks as identified in the AC tables above. Contract-dependent
-automated criteria are labelled **not done**, even where the test is represented
-by a skipped/todo row to prevent invented semantics.
+automated criteria are labelled **not done** and represented by todo rows to
+prevent invented semantics.
 
 ## Spec questions
 
