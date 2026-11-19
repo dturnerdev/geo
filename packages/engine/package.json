@@ -12,5 +12,8 @@
     "./time": "./src/time/index.ts",
     "./tuning": "./src/tuning.ts",
     "./random": "./src/random.ts"
+  },
+  "dependencies": {
+    "d3-geo": "3.1.2"
   }
 }

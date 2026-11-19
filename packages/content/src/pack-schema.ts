@@ -2,6 +2,22 @@ import { experimentDefinitionSchema, packFlagSchema } from '@geo/domain';
 import { z } from 'zod';
 import { canonicalJson } from './canonical-json.ts';
 import { equalBytes, utf8Encode } from './bytes.ts';
+import { validateGeometryPack } from './geometry-pack.ts';
+import {
+  geometryPackPartSchema,
+  geometryPackSchema,
+  type DetailLevel,
+  type FeatureSlotEntry,
+  type GeometryChunk,
+  type GeometryPack,
+  type GeometryPackPart,
+  type RegionChunk,
+} from './geometry.ts';
+import {
+  perspectivePackSchema,
+  validatePerspectivePacks,
+  type PerspectivePack,
+} from './perspective.ts';
 
 // A pack is a signed manifest plus immutable, content-addressed chunks
 // (FE02 behaviour 2–3). Zod validates every field at the network boundary
@@ -53,8 +69,30 @@ export const packPayloadSchema = z
       })
       .strict()
       .default({ schedule: [] }),
+    geometry: geometryPackSchema.default(() => ({
+      featureSlotTable: { entries: [] },
+      chunks: [],
+      regionChunks: [],
+    })),
+    perspectives: z.array(perspectivePackSchema).default([]),
   })
-  .strict();
+  .strict()
+  .superRefine((payload, context) => {
+    for (const issue of validateGeometryPack(payload.geometry)) {
+      context.addIssue({
+        code: 'custom',
+        path: ['geometry', ...issue.path],
+        message: issue.message,
+      });
+    }
+    for (const issue of validatePerspectivePacks(payload.perspectives)) {
+      context.addIssue({
+        code: 'custom',
+        path: [...issue.path],
+        message: issue.message,
+      });
+    }
+  });
 
 export type PackPayload = z.infer<typeof packPayloadSchema>;
 export type PackItem = z.infer<typeof itemSchema>;
@@ -75,6 +113,8 @@ export const packPartSchema = z
       })
       .strict()
       .optional(),
+    geometry: geometryPackPartSchema.optional(),
+    perspectives: z.array(perspectivePackSchema).optional(),
   })
   .strict();
 
@@ -94,6 +134,51 @@ export interface MergedPackParts {
   readonly experiments: readonly unknown[];
   readonly tuning: Readonly<Record<string, unknown>>;
   readonly daily: { readonly schedule: readonly unknown[] };
+  readonly geometry: GeometryPack;
+  readonly perspectives: readonly PerspectivePack[];
+}
+
+function mergeGeometryParts(parts: readonly (GeometryPackPart | undefined)[]): GeometryPack {
+  const entries = new Map<number, FeatureSlotEntry>();
+  const conflicting: FeatureSlotEntry[] = [];
+  const chunks: GeometryChunk[] = [];
+  const regionChunks: RegionChunk[] = [];
+
+  for (const part of parts) {
+    if (part === undefined) {
+      continue;
+    }
+    for (const entry of part.featureSlotTable?.entries ?? []) {
+      const existing = entries.get(entry.slot);
+      if (existing === undefined) {
+        entries.set(entry.slot, entry);
+        continue;
+      }
+      if (existing.featureId !== entry.featureId || existing.item !== entry.item) {
+        // Keep the conflict so the pack validator rejects it.
+        conflicting.push(entry);
+      }
+    }
+    chunks.push(...(part.chunks ?? []));
+    regionChunks.push(...(part.regionChunks ?? []));
+  }
+
+  const order: Readonly<Record<DetailLevel, number>> = { L0: 0, L1: 1, L2: 2 };
+  const sortedEntries = [...entries.values(), ...conflicting].sort(
+    (left, right) => left.slot - right.slot || left.featureId.localeCompare(right.featureId),
+  );
+  const sortedChunks = [...chunks].sort(
+    (left, right) =>
+      order[left.level] - order[right.level] ||
+      (left.region ?? '').localeCompare(right.region ?? ''),
+  );
+  const sortedRegions = [...regionChunks].sort((left, right) => left.id.localeCompare(right.id));
+
+  return {
+    featureSlotTable: { entries: sortedEntries },
+    chunks: sortedChunks,
+    regionChunks: sortedRegions,
+  };
 }
 
 export function mergePackParts(parts: readonly PackPart[]): MergedPackParts {
@@ -102,6 +187,7 @@ export function mergePackParts(parts: readonly PackPart[]): MergedPackParts {
   const experiments: unknown[] = [];
   let tuning: Record<string, unknown> = {};
   const schedule: unknown[] = [];
+  const perspectives: PerspectivePack[] = [];
 
   for (const part of parts) {
     items.push(...(part.items ?? []));
@@ -109,9 +195,18 @@ export function mergePackParts(parts: readonly PackPart[]): MergedPackParts {
     experiments.push(...(part.experiments ?? []));
     tuning = { ...tuning, ...(part.tuning ?? {}) };
     schedule.push(...(part.daily?.schedule ?? []));
+    perspectives.push(...(part.perspectives ?? []));
   }
 
-  return { items, flags, experiments, tuning, daily: { schedule } };
+  return {
+    items,
+    flags,
+    experiments,
+    tuning,
+    daily: { schedule },
+    geometry: mergeGeometryParts(parts.map((part) => part.geometry)),
+    perspectives,
+  };
 }
 
 export function manifestSigningMessage(manifest: PackManifest): Uint8Array {
