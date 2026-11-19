@@ -5,5 +5,9 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "three": "0.187.0",
+    "troika-three-text": "0.53.1"
   }
 }
