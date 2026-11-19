@@ -10,6 +10,7 @@ entry. Update this table in the same PR that adds or removes a dependency
 | `@capacitor-community/sqlite` | 8.1.1 | MIT | Android SQLite persistence |
 | `@eslint/js` | 9.39.5 | MIT | Lint configuration |
 | `@formatjs/icu-messageformat-parser` | 3.5.23 | BSD-3-Clause | ICU message validation (gate 2) |
+| `@open-spaced-repetition/binding-wasm32-wasip1` | 0.6.1 | MIT | FE17 optimiser Worker binding |
 | `@playwright/test` | 1.65.1 | Apache-2.0 | Desktop Chromium E2E tests |
 | `@sqlite.org/sqlite-wasm` | 3.54.1-build1 | Apache-2.0 | Web SQLite persistence |
 | `@types/node` | 22.20.5 | MIT | Node type definitions |
@@ -23,6 +24,7 @@ entry. Update this table in the same PR that adds or removes a dependency
 | `typescript` | 5.9.3 | Apache-2.0 | Type check (gate 1) |
 | `typescript-eslint` | 8.73.0 | MIT | Type-aware lint (gate 2) |
 | `troika-three-text` | 0.53.1 | MIT | Globe labels |
+| `ts-fsrs` | 6.0.0 | MIT | FE13 FSRS-6 memory model |
 | `vite` | 7.3.8 | MIT | Web build (gate 8) |
 | `vitest` | 3.2.7 | MIT | Unit and property tests (gate 7) |
 | `zod` | 4.6.7 | MIT | Boundary validation for domain events and persistence |

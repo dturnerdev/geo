@@ -4,6 +4,7 @@
     "@eslint/js",
     "@formatjs/icu-messageformat-parser",
     "@capacitor-community/sqlite",
+    "@open-spaced-repetition/binding-wasm32-wasip1",
     "@playwright/test",
     "@sqlite.org/sqlite-wasm",
     "@types/node",
@@ -17,6 +18,7 @@
     "typescript",
     "typescript-eslint",
     "troika-three-text",
+    "ts-fsrs",
     "vite",
     "vitest",
     "zod"
