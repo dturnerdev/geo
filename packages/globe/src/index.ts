@@ -1,2 +1,10 @@
-// Package scaffold (07 §3). Feature code lands with its milestone.
-export {};
+export * from './types.ts';
+export * from './camera.ts';
+export * from './atlas-texture.ts';
+export * from './cut-mesh-loader.ts';
+export * from './frame-scheduler.ts';
+export * from './geometry.ts';
+export * from './label-layout.ts';
+export * from './morph.ts';
+export * from './theme.ts';
+export * from './controller.ts';
