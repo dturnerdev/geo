@@ -10,6 +10,7 @@ export * from './detail-source.ts';
 export * from './experiment-register.ts';
 export * from './geometry-pack.ts';
 export * from './geometry.ts';
+export * from './game-catalogue.ts';
 export * from './host.ts';
 export * from './pack-schema.ts';
 export * from './perspective.ts';

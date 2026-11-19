@@ -1,0 +1,12 @@
+# Experimental game; off by default until the flag is enabled (FE10).
+name = "Cartographer"
+id = "game.cartographer.f05.r4"
+primitive = "P9"
+facet = "F05"
+level = "R4"
+channels = ["visual", "spatial"]
+load = 3
+assets = ["map"]
+grader = "P9"
+generator = "P9"
+flag = "game.cartographer"

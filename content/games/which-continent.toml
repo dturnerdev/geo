@@ -1,0 +1,10 @@
+name = "Which Continent?"
+id = "game.which-continent.f02.r1"
+primitive = "P3"
+facet = "F02"
+level = "R1"
+channels = ["visual", "typed"]
+load = 1
+assets = ["map"]
+grader = "P3"
+generator = "P3"

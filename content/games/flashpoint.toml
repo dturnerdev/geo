@@ -1,0 +1,11 @@
+# FE10 representative MVP catalogue entry: F01 R1, tap a region (P1).
+name = "Flashpoint"
+id = "game.flashpoint.f01.r1"
+primitive = "P1"
+facet = "F01"
+level = "R1"
+channels = ["visual", "spatial"]
+load = 1
+assets = ["map"]
+grader = "P1"
+generator = "P1"

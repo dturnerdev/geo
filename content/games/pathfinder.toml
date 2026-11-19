@@ -1,0 +1,10 @@
+name = "Pathfinder"
+id = "game.pathfinder.f11.r4"
+primitive = "P7"
+facet = "F11"
+level = "R4"
+channels = ["visual", "spatial"]
+load = 3
+assets = ["map"]
+grader = "P7"
+generator = "P7"

@@ -1,0 +1,10 @@
+name = "Compass pick"
+id = "game.compass-pick.f12.r1"
+primitive = "P8"
+facet = "F12"
+level = "R1"
+channels = ["visual", "spatial", "typed"]
+load = 2
+assets = ["map"]
+grader = "P8"
+generator = "P8"

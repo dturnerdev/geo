@@ -1,0 +1,10 @@
+name = "Rank It"
+id = "game.rank-it.f15.r2"
+primitive = "P6"
+facet = "F15"
+level = "R2"
+channels = ["visual", "spatial"]
+load = 2
+assets = ["cross-section"]
+grader = "P6"
+generator = "P6"

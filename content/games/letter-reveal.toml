@@ -1,0 +1,10 @@
+name = "Letter Reveal"
+id = "game.letter-reveal.f04.r2"
+primitive = "P4"
+facet = "F04"
+level = "R2"
+channels = ["visual", "typed"]
+load = 2
+assets = []
+grader = "P4"
+generator = "P4"
