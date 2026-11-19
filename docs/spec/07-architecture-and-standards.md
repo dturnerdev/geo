@@ -40,6 +40,8 @@ If a feature file names a different path or package, the feature file wins.
 | `three` | 0.187.0 | MIT | FE06 (globe and flat map) |
 | `d3-geo` | 3.1.2 | ISC | FE06 (flat map projection and inverse projection) |
 | `troika-three-text` | 0.53.1 | MIT | FE06 (labels) |
+| `ts-fsrs` | 6.0.0 | MIT | FE13 FSRS-6 memory model |
+| `@open-spaced-repetition/binding-wasm32-wasip1` | 0.6.1 | MIT | FE17 optimiser Worker binding |
 
 A new runtime dependency needs a PR that adds it to the allowlist with a
 reason (D107, AC-29.3). Never: analytics, ads, crash reporting, remote config

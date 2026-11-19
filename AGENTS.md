@@ -17,7 +17,7 @@
 - Dependencies: exact pinned versions. Runtime dependencies only if the spec
   names them or a feature can't be built without one. No analytics, ads or
   crash-reporting SDKs. Every new runtime dependency goes in the report.
-- Allowed runtime dependencies: `@sqlite.org/sqlite-wasm`, `@capacitor-community/sqlite`, `three@0.187.0`, `d3-geo@3.1.2`, `troika-three-text@0.53.1`, exact pinned versions.
+- Allowed runtime dependencies: `@sqlite.org/sqlite-wasm`, `@capacitor-community/sqlite`, `three@0.187.0`, `d3-geo@3.1.2`, `troika-three-text@0.53.1`, `ts-fsrs@6.0.0`, `@open-spaced-repetition/binding-wasm32-wasip1@0.6.1`, exact pinned versions.
 - No network calls except those the spec allows.
 - British English in user-facing strings, comments and docs.
 
