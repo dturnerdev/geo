@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { FlagSnapshot } from '../../../domain/src/index.ts';
 import {
   buildRound,
   rebuildRemaining,
@@ -9,7 +10,7 @@ import {
   type RoundInput,
 } from './index.ts';
 
-const flags = { channel: 'internal', flags: {}, variants: {}, sources: {} };
+const flags: FlagSnapshot = { channel: 'internal', flags: {}, variants: {}, sources: {} };
 
 const view: ContentView = {
   item: () => undefined,

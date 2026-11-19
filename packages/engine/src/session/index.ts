@@ -7,12 +7,7 @@
 // FE15 names these FE10/domain types but this minimal boundary must compile on
 // its own without inventing their shapes. They stay opaque until the owning
 // features are wired in.
-export type ItemId = string;
-export type RoundId = string;
-export interface GameDefinition {
-  readonly id: string;
-}
-export type FlagSnapshot = unknown;
+import type { FlagSnapshot, GameDefinition, ItemId, RoundId } from '../../../domain/src/index.ts';
 
 // FE15 names this type but neither it nor the memory model defines it before
 // M3. Keep it opaque so no learner-state vocabulary is invented.
