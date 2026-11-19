@@ -2,6 +2,7 @@ export * from './answers.ts';
 export * from './events.ts';
 export * from './game.ts';
 export * from './flags.ts';
+export * from './grading.ts';
 export * from './ids.ts';
 export * from './locale.ts';
 export * from './ordering.ts';
