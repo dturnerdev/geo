@@ -176,7 +176,7 @@ d042c55 build(M2): update plan
 |---|---|
 | `pnpm lint` | Pass |
 | `pnpm typecheck` | Pass |
-| `pnpm test` | Pass — 248 passed, 54 skipped, 14 todo |
+| `pnpm test` | Pass — 248 passed, 32 skipped, 36 todo |
 | `pnpm e2e` | Pass — 2 passed, 5 skipped |
 | `pnpm build` | Pass |
 | `pnpm format:check` | Pass |
