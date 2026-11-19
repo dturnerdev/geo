@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { packChunkPath, packManifestPath, StaticPackHost, type FetchInitLike } from './host.ts';
+import { packChunkDescriptorSchema } from './pack-schema.ts';
 import { utf8Encode } from './bytes.ts';
 
 const HASH = 'a'.repeat(64);
@@ -48,6 +49,27 @@ describe('FE02 static pack host', () => {
   it.skip('AC-02.8 all requests go only to our host; no cookies or identifiers (browser network audit)', () => {
     // Skipped: needs the hosted Playwright network audit (CI gate 5), which is
     // not available in this worktree.
+  });
+
+  it('AC-09.6 detail chunks stay on our pack host and are content-addressed', async () => {
+    const recorder = recordingFetch();
+    const host = new StaticPackHost({
+      baseUrl: 'https://packs.example',
+      fetch: recorder.fetch,
+    });
+    const levelHashes = ['0'.repeat(64), '1'.repeat(64), '2'.repeat(64)];
+
+    await Promise.all(levelHashes.map((hash) => host.fetchChunk(hash)));
+
+    expect(recorder.calls.map((call) => call.url)).toEqual(
+      levelHashes.map((hash) => `https://packs.example/packs/chunks/${hash}`),
+    );
+    expect(
+      recorder.calls.every((call) => new URL(call.url).origin === 'https://packs.example'),
+    ).toBe(true);
+    expect(
+      packChunkDescriptorSchema.safeParse({ sha256: 'https://example.test/chunk' }).success,
+    ).toBe(false);
   });
 
   it('refuses pack paths that could escape the static layout', () => {
