@@ -1,0 +1,10 @@
+name = "Hot/Cold"
+id = "game.hot-cold.f01.r2"
+primitive = "P2"
+facet = "F01"
+level = "R2"
+channels = ["visual", "spatial"]
+load = 2
+assets = ["map"]
+grader = "P2"
+generator = "P2"

@@ -1,0 +1,10 @@
+name = "Pairs"
+id = "game.pairs.f04.r1"
+primitive = "P5"
+facet = "F04"
+level = "R1"
+channels = ["visual"]
+load = 2
+assets = []
+grader = "P5"
+generator = "P5"
