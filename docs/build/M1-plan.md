@@ -28,3 +28,10 @@ missing-locale fallback, disputed-area content/treatment, and geometry/removal
 rendering when an item leaves a perspective. FE08 also depends on the undefined
 M3-owned `LearnerState`. No implementation or authored learner-visible data will
 invent these points.
+
+## Review
+
+Independent review completed with no implementation or gate blockers. Review
+follow-up `fix(M1): review fixes` (`877e029`) added explicit `it.todo` entries
+for the 13 ACs that remain not done because their M3 or pause-flow contracts do
+not exist; no additional AC was skipped.
