@@ -10,5 +10,6 @@ export * from './geometry-pack.ts';
 export * from './geometry.ts';
 export * from './host.ts';
 export * from './pack-schema.ts';
+export * from './perspective.ts';
 export * from './scheduler.ts';
 export * from './signing-keys.ts';

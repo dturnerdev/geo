@@ -3,6 +3,7 @@ export * from './flags.ts';
 export * from './ids.ts';
 export * from './locale.ts';
 export * from './ordering.ts';
+export * from './perspective.ts';
 export * from './projection.ts';
 export * from './result.ts';
 export * from './upgraders.ts';

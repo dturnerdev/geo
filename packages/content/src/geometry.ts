@@ -1,5 +1,7 @@
-import type { ItemId, Result } from '@geo/domain';
+import type { BorderStyle, ItemId, Result } from '@geo/domain';
 import { z } from 'zod';
+
+export type { BorderStyle };
 
 // FE09 geometry contracts. These are logical pack records, not a transport
 // encoding (04 §6.1). Zod validates every value that crosses the network or
@@ -16,8 +18,6 @@ export type LngLat = Readonly<{ lng: number; lat: number }> & {
 
 export type FeatureSlot = number & { readonly __brand: 'FeatureSlot' };
 export type RegionChunkId = string & { readonly __brand: 'RegionChunkId' };
-
-export type BorderStyle = 'agreed' | 'disputed' | 'claim';
 
 export interface BorderLine {
   readonly id: string;

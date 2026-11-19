@@ -1,10 +1,12 @@
 /// <reference lib="dom" />
 
 import type { ItemId } from '../../domain/src/ids.ts';
+import type { PerspectiveId } from '../../domain/src/perspective.ts';
 import type { Result } from '../../domain/src/result.ts';
 import type { LngLat } from '../../engine/src/geo/index.ts';
 
 export type { LngLat } from '../../engine/src/geo/index.ts';
+export type { PerspectiveId } from '../../domain/src/perspective.ts';
 
 export type ViewMode = 'globe' | 'flat';
 
@@ -80,8 +82,6 @@ export interface AtlasFeatureStateEntry {
   readonly slot: FeatureSlot;
   readonly layers: AtlasLayerStates;
 }
-
-export type PerspectiveId = 'uk' | 'us' | 'default';
 
 export interface AtlasSnapshot {
   readonly perspective: PerspectiveId;

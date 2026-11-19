@@ -1,6 +1,7 @@
 export * from './types.ts';
 export * from './camera.ts';
 export * from './atlas-texture.ts';
+export * from './border-pattern.ts';
 export * from './cut-mesh-loader.ts';
 export * from './frame-scheduler.ts';
 export * from './geometry.ts';

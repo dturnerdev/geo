@@ -13,6 +13,11 @@ import {
   type GeometryPackPart,
   type RegionChunk,
 } from './geometry.ts';
+import {
+  perspectivePackSchema,
+  validatePerspectivePacks,
+  type PerspectivePack,
+} from './perspective.ts';
 
 // A pack is a signed manifest plus immutable, content-addressed chunks
 // (FE02 behaviour 2–3). Zod validates every field at the network boundary
@@ -69,6 +74,7 @@ export const packPayloadSchema = z
       chunks: [],
       regionChunks: [],
     })),
+    perspectives: z.array(perspectivePackSchema).default([]),
   })
   .strict()
   .superRefine((payload, context) => {
@@ -76,6 +82,13 @@ export const packPayloadSchema = z
       context.addIssue({
         code: 'custom',
         path: ['geometry', ...issue.path],
+        message: issue.message,
+      });
+    }
+    for (const issue of validatePerspectivePacks(payload.perspectives)) {
+      context.addIssue({
+        code: 'custom',
+        path: [...issue.path],
         message: issue.message,
       });
     }
@@ -101,6 +114,7 @@ export const packPartSchema = z
       .strict()
       .optional(),
     geometry: geometryPackPartSchema.optional(),
+    perspectives: z.array(perspectivePackSchema).optional(),
   })
   .strict();
 
@@ -121,6 +135,7 @@ export interface MergedPackParts {
   readonly tuning: Readonly<Record<string, unknown>>;
   readonly daily: { readonly schedule: readonly unknown[] };
   readonly geometry: GeometryPack;
+  readonly perspectives: readonly PerspectivePack[];
 }
 
 function mergeGeometryParts(parts: readonly (GeometryPackPart | undefined)[]): GeometryPack {
@@ -172,6 +187,7 @@ export function mergePackParts(parts: readonly PackPart[]): MergedPackParts {
   const experiments: unknown[] = [];
   let tuning: Record<string, unknown> = {};
   const schedule: unknown[] = [];
+  const perspectives: PerspectivePack[] = [];
 
   for (const part of parts) {
     items.push(...(part.items ?? []));
@@ -179,6 +195,7 @@ export function mergePackParts(parts: readonly PackPart[]): MergedPackParts {
     experiments.push(...(part.experiments ?? []));
     tuning = { ...tuning, ...(part.tuning ?? {}) };
     schedule.push(...(part.daily?.schedule ?? []));
+    perspectives.push(...(part.perspectives ?? []));
   }
 
   return {
@@ -188,6 +205,7 @@ export function mergePackParts(parts: readonly PackPart[]): MergedPackParts {
     tuning,
     daily: { schedule },
     geometry: mergeGeometryParts(parts.map((part) => part.geometry)),
+    perspectives,
   };
 }
 
